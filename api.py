@@ -8,32 +8,35 @@ api = Api(app)
 
 now = str(datetime.datetime.now())
 
-TODOS = {
-    '1': {
+TODOS = [
+    {
+        'id': 1,
         'title': 'build an API',
         'description': 'this is desc1',
         'due_date': now,
         'completed': True,
         'created_at': now,
         'updated_at': now
-        },
-    '2': {
+    },
+    {
+        'id':2,
         'title': "write article",
         'description': 'this is desc1',
         'due_date': now,
         'completed': True,
         'created_at': now,
         'updated_at': now
-        },
-    '3': {
+    },
+    {
+        'id':3,
         'title': 'profit!',
         'description': 'this is desc1',
         'due_date': now,
         'completed': True,
         'created_at': now,
         'updated_at': now
-        }
-}
+    }
+]
 
 
 def abort_if_todo_doesnt_exist(todo_id):
@@ -74,7 +77,7 @@ class Todo(Resource):
 
 class TodoList(Resource):
     def get(self):
-        return TODOS
+        return TODOS, 200, {'Access-Control-Allow-Origin': '*'}
 
     def post(self):
         args = parser.parse_args()
