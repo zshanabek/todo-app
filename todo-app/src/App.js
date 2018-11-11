@@ -1,47 +1,35 @@
 import React, { Component } from 'react';
 import './App.css';
 
+const data = [
+  {
+    title: "build an API",
+    description: "this is desc1",
+  },
+  {
+    title: "write article",
+    description: "this is desc1",
+  },
+  {
+    title: "profit!",
+    description: "this is desc1",
+  },
+]
+
+const Todo = props =>
+  <div className="pure-u-1-3">
+    <h2>{props.title}</h2>
+    <p>{props.description}</p>
+  </div>;
 class App extends Component {
-
-  constructor(props){
-    super(props);
-    this.state = {
-      items:[],
-      isLoaded: false,
-    }
-  }
-
-  componentDidMount(){
-    fetch('http://localhost:5000/todos/')
-    .then(res => res.json())
-    .then(json => {
-      this.setState({
-        isLoaded: true,
-        items: json,
-      })
-    });
-  }
-
   render() {
-    var { isLoaded, items } = this.state;
-    
-    if (!isLoaded) {
-      return <div>Loading...</div>;
-    }
-    else {
-      return (
-        <div className="App">
-
-          <ul>
-            {items.map(item => (
-              <li key={item.id}>
-                {item.title} | {item.description}
-              </li>
-            ))};
-          </ul>
-        </div>
-      );
-    }
+    return (
+      <div className="App pure-g">
+        {data.map(info =>
+          <Todo {...info} />
+          )}
+      </div>
+    );
   }
 }
 
