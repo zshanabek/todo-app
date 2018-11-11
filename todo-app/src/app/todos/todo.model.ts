@@ -5,7 +5,7 @@ export class Todo {
       public completed: boolean,
       public due_date: Date,
       public _id?: number,
-      public updatedAt?: Date,
-      public createdAt?: Date,
+      public updated_at?: Date,
+      public created_at?: Date,
     ) { }
 }
