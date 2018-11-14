@@ -1,10 +1,11 @@
 <template>
    <b-container>
-    <div class="row">
-      <div class="col-sm-10">
+    <b-row>
+      <b-col col sm="10">
         <h1>Todos</h1>
         <hr><br><br>
-        <button type="button" class="btn btn-success btn-sm" v-b-modal.todo-modal>Add todo</button>
+        <alert :message="message" v-if="showMessage"></alert>
+        <button type="button" class="btn btn-success btn-sm" v-b-modal.todo-modal>Add Todo</button>
         <br><br>
         <table class="table table-hover">
           <thead>
@@ -26,14 +27,20 @@
                 <span v-else>No</span>
               </td>
               <td>
-                <button type="button" class="btn btn-warning btn-sm">Update</button>
+                <button
+                        type="button"
+                        class="btn btn-warning btn-sm"
+                        v-b-modal.todo-update-modal
+                        @click="editTodo(todo)">
+                    Update
+                </button>
                 <button type="button" class="btn btn-danger btn-sm">Delete</button>
               </td>
             </tr>
           </tbody>
         </table>
-      </div>
-    </div>
+      </b-col>
+    </b-row>
     <b-modal ref="addTodoModal"
          id="todo-modal"
          title="Add a new todo"
@@ -59,10 +66,11 @@
                           placeholder="Enter description">
             </b-form-input>
           </b-form-group>
-        <b-form-group id="form-due_date-group" 
+        <b-form-group id="form-due_date-group"
                       label="Due date:"
                       label-for="form-due_date-input">
           <datepicker id="form-due_date-input"
+                      type="text"
                       v-model="addTodoForm.due_date"
                       required
                       placeholder="Select Date">
@@ -72,7 +80,41 @@
         <b-button type="reset" variant="danger">Reset</b-button>
       </b-form>
     </b-modal>
-  </b-containter>
+    <b-modal ref="editTodoModal"
+         id="todo-update-modal"
+         title="Update"
+         hide-footer>
+      <b-form @submit="onSubmitUpdate" @reset="onResetUpdate" class="w-100">
+        <b-form-group id="form-title-edit-group"
+                      label="Title:"
+                      label-for="form-title-edit-input">
+          <b-form-input id="form-title-edit-input"
+                        type="text"
+                        v-model="editForm.title"
+                        required
+                        placeholder="Enter title">
+          </b-form-input>
+        </b-form-group>
+        <b-form-group id="form-description-edit-group"
+                      label="Description:"
+                      label-for="form-description-edit-input">
+          <b-form-input id="form-description-edit-input"
+                        type="text"
+                        v-model="editForm.description"
+                        required
+                        placeholder="Enter description">
+          </b-form-input>
+        </b-form-group>
+        <b-form-group id="form-completed-edit-group">
+          <b-form-checkbox-group v-model="editForm.completed" id="form-checks">
+            <b-form-checkbox value="true">Completed?</b-form-checkbox>
+          </b-form-checkbox-group>
+        </b-form-group>
+        <b-button type="submit" variant="primary">Update</b-button>
+        <b-button type="reset" variant="danger">Cancel</b-button>
+      </b-form>
+    </b-modal>
+  </b-container>
 </template>
 
 <script>
@@ -89,6 +131,15 @@ export default {
         description: '',
         due_date: '',
       },
+      editForm: {
+        id: '',
+        title: '',
+        description: '',
+        due_date: '',
+        completed: [],
+      },
+      message: '',
+      showMessage: false,
     };
   },
   components: {
@@ -112,6 +163,8 @@ export default {
       axios.post(path, payload)
         .then(() => {
           this.getTodos();
+          this.message = 'Todo created!';
+          this.showMessage = true;
         })
         .catch((error) => {
           // eslint-disable-next-line
@@ -123,6 +176,10 @@ export default {
       this.addTodoForm.title = '';
       this.addTodoForm.description = '';
       this.addTodoForm.due_date = null;
+      this.showMessage = false;
+      this.editForm.title = '';
+      this.editForm.description = '';
+      this.editForm.completed = [];
     },
     onSubmit(evt) {
       evt.preventDefault();
@@ -139,6 +196,42 @@ export default {
       evt.preventDefault();
       this.$refs.addTodoModal.hide();
       this.initForm();
+    },
+    editTodo(todo) {
+      this.editForm = todo;
+    },
+    onSubmitUpdate(evt) {
+      evt.preventDefault();
+      this.$refs.editTodoModal.hide();
+      let completed = false;
+      if (this.editForm.completed[0]) completed = true;
+      const payload = {
+        title: this.editForm.title,
+        description: this.editForm.description,
+        due_date: this.addTodoForm.due_date,
+        completed,
+      };
+      this.updateTodo(payload, this.editForm.id);
+    },
+    updateTodo(payload, todoID) {
+      const path = `http://localhost:5000/todos/${todoID}`;
+      axios.put(path, payload)
+        .then(() => {
+          this.getTodos();
+          this.message = 'Todo updated!';
+          this.showMessage = true;
+        })
+        .catch((error) => {
+          // eslint-disable-next-line
+          console.error(error);
+          this.getTodos();
+        });
+    },
+    onResetUpdate(evt) {
+      evt.preventDefault();
+      this.$refs.editTodoModal.hide();
+      this.initForm();
+      this.getTodos(); // why?
     },
   },
   created() {
