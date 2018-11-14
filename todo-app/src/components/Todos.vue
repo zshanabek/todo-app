@@ -51,7 +51,7 @@
          title="Add a new todo"
          hide-footer>
       <b-form @submit="onSubmit" @reset="onReset" class="w-100">
-      <b-form-group id="form-title-group"
+        <b-form-group id="form-title-group"
                     label="Title:"
                     label-for="form-title-input">
           <b-form-input id="form-title-input"
@@ -64,21 +64,19 @@
         <b-form-group id="form-description-group"
                       label="Description:"
                       label-for="form-description-input">
-            <b-form-input id="form-description-input"
-                          type="text"
-                          v-model="addTodoForm.description"
-                          required
-                          placeholder="Enter description">
-            </b-form-input>
-          </b-form-group>
+          <b-form-input id="form-description-input"
+                        type="text"
+                        v-model="addTodoForm.description"
+                        placeholder="Enter description">
+          </b-form-input>
+        </b-form-group>
         <b-form-group id="form-due_date-group"
                       label="Due date:"
                       label-for="form-due_date-input">
           <datepicker id="form-due_date-input"
                       type="text"
                       v-model="addTodoForm.due_date"
-                      required
-                      placeholder="Select Date">
+                      placeholder="Select date">
           </datepicker>
         </b-form-group>
         <b-button type="submit" variant="primary">Submit</b-button>
@@ -109,6 +107,15 @@
                         required
                         placeholder="Enter description">
           </b-form-input>
+        </b-form-group>
+        <b-form-group id="form-due_date-group"
+                      label="Due date:"
+                      label-for="form-due_date-input">
+          <datepicker id="form-due_date-input"
+                      type="text"
+                      v-model="editForm.due_date"
+                      placeholder="Enter date">
+          </datepicker>
         </b-form-group>
         <b-form-group id="form-completed-edit-group">
           <b-form-checkbox-group v-model="editForm.completed" id="form-checks">
@@ -212,7 +219,7 @@ export default {
       const payload = {
         title: this.editForm.title,
         description: this.editForm.description,
-        due_date: this.addTodoForm.due_date,
+        due_date: this.editForm.due_date,
         completed,
       };
       this.updateTodo(payload, this.editForm.id);

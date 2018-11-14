@@ -10,13 +10,12 @@ api = Api(app)
 CORS(app)
 
 now = str(datetime.datetime.now())
-ok = datetime.datetime.now().strftime('%d.%m.%Y')
 TODOS = [
     {
         'id': 1,
         'title': 'build an API',
         'description': 'this is desc1',
-        'due_date': ok,
+        'due_date': str(datetime.date.today() + datetime.timedelta(days=1)),
         'completed': True,
         'created_at': now,
         'updated_at': now
@@ -25,7 +24,7 @@ TODOS = [
         'id': 2,
         'title': "write article",
         'description': 'this is desc1',
-        'due_date': ok,
+        'due_date': str(datetime.date.today() + datetime.timedelta(days=2)),
         'completed': True,
         'created_at': now,
         'updated_at': now
@@ -34,7 +33,7 @@ TODOS = [
         'id': 3,
         'title': 'profit!',
         'description': 'this is desc1',
-        'due_date': ok,
+        'due_date': str(datetime.date.today() + datetime.timedelta(days=3)),
         'completed': False,
         'created_at': now,
         'updated_at': now
@@ -74,18 +73,13 @@ class Todo(Resource):
         abort_if_todo_doesnt_exist(todo_id)
         args = parser.parse_args()
         prev = find_todo(todo_id)
-        task = {
-                'id': prev['id'],
-                'title': prev['title'] if args['title'] == None else args['title'],
-                'description': prev['description'] if args['description'] == None else args['description'],
-                'due_date': prev['due_date'] if args['due_date'] == None else args['due_date'],
-                'completed': prev['completed'] if args['completed'] == None else args['completed'],
-                'created_at': prev['created_at'] if args['created_at'] == None else args['created_at'],
-                'updated_at': prev['updated_at'] if args['updated_at'] == None else args['updated_at']
-                }
-        TODOS.remove(prev)
-        TODOS.append(task)
-        return task, 201
+        prev['title'] =  prev['title'] if args['title'] == None else args['title']
+        prev['description'] = prev['description'] if args['description'] == None else args['description']
+        prev['due_date'] = prev['due_date'] if args['due_date'] == None else args['due_date']
+        prev['completed'] = prev['completed'] if args['completed'] == None else args['completed']
+        prev['created_at'] = prev['created_at'] if args['created_at'] == None else args['created_at']
+        prev['updated_at'] = prev['updated_at'] if args['updated_at'] == None else args['updated_at']
+        return prev, 201
 
 class TodoList(Resource):
     def get(self):
@@ -94,7 +88,10 @@ class TodoList(Resource):
     def post(self):
         now = str(datetime.datetime.now())
         args = parser.parse_args()
-        todo_id = TODOS[-1]['id'] + 1
+        if (len(TODOS) == 0):
+            todo_id = 1
+        else:
+            todo_id = max(TODOS, key=lambda x:x['id'])['id'] + 1
         todo = {
             'id': todo_id,
             'title': args['title'],
