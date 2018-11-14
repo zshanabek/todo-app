@@ -34,7 +34,12 @@
                         @click="editTodo(todo)">
                     Update
                 </button>
-                <button type="button" class="btn btn-danger btn-sm">Delete</button>
+                <button
+                        type="button"
+                        class="btn btn-danger btn-sm"
+                        @click="onDeleteTodo(todo)">
+                    Delete
+                </button>
               </td>
             </tr>
           </tbody>
@@ -176,7 +181,6 @@ export default {
       this.addTodoForm.title = '';
       this.addTodoForm.description = '';
       this.addTodoForm.due_date = null;
-      this.showMessage = false;
       this.editForm.title = '';
       this.editForm.description = '';
       this.editForm.completed = [];
@@ -231,7 +235,24 @@ export default {
       evt.preventDefault();
       this.$refs.editTodoModal.hide();
       this.initForm();
-      this.getTodos(); // why?
+      this.getTodos();
+    },
+    removeTodo(todoID) {
+      const path = `http://localhost:5000/todos/${todoID}`;
+      axios.delete(path)
+        .then(() => {
+          this.getTodos();
+          this.message = 'Todo removed!';
+          this.showMessage = true;
+        })
+        .catch((error) => {
+          // eslint-disable-next-line
+          console.error(error);
+          this.getTodos();
+        });
+    },
+    onDeleteTodo(todo) {
+      this.removeTodo(todo.id);
     },
   },
   created() {
