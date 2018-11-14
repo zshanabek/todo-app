@@ -13,7 +13,7 @@ now = str(datetime.datetime.now())
 ok = datetime.datetime.now().strftime('%d.%m.%Y')
 TODOS = [
     {
-        'id': 0,
+        'id': 1,
         'title': 'build an API',
         'description': 'this is desc1',
         'due_date': ok,
@@ -22,7 +22,7 @@ TODOS = [
         'updated_at': now
     },
     {
-        'id': 1,
+        'id': 2,
         'title': "write article",
         'description': 'this is desc1',
         'due_date': ok,
@@ -31,7 +31,7 @@ TODOS = [
         'updated_at': now
     },
     {
-        'id': 2,
+        'id': 3,
         'title': 'profit!',
         'description': 'this is desc1',
         'due_date': ok,
@@ -46,10 +46,14 @@ def abort_if_todo_doesnt_exist(todo_id):
 	if (a == False):
 		abort(404, message="Todo {} doesn't exist".format(todo_id))
 
+def find_todo(todo_id):
+    ok = next(item for item in TODOS if item["id"] == todo_id)
+    return ok
+
 parser = reqparse.RequestParser()
 parser.add_argument('title', required=True)
 parser.add_argument('description')
-parser.add_argument('due_date', required = True)
+parser.add_argument('due_date')
 parser.add_argument('completed', type=inputs.boolean)
 parser.add_argument('created_at')
 parser.add_argument('updated_at')
@@ -57,17 +61,19 @@ parser.add_argument('updated_at')
 class Todo(Resource):
     def get(self, todo_id):
         abort_if_todo_doesnt_exist(todo_id)
-        return TODOS[todo_id]
+        t = find_todo(todo_id)
+        return t
 
     def delete(self, todo_id):
         abort_if_todo_doesnt_exist(todo_id)
-        del TODOS[todo_id]
+        t = find_todo(todo_id)
+        TODOS.remove(t)
         return '', 204
 
     def put(self, todo_id):
         abort_if_todo_doesnt_exist(todo_id)
         args = parser.parse_args()
-        prev = TODOS[todo_id]
+        prev = find_todo(todo_id)
         task = {
                 'id': prev['id'],
                 'title': prev['title'] if args['title'] == None else args['title'],
@@ -77,17 +83,17 @@ class Todo(Resource):
                 'created_at': prev['created_at'] if args['created_at'] == None else args['created_at'],
                 'updated_at': prev['updated_at'] if args['updated_at'] == None else args['updated_at']
                 }
-        TODOS[todo_id] = task
+        prev = task
         return task, 201
 
 class TodoList(Resource):
     def get(self):
-        return TODOS, 200, {'Access-Control-Allow-Origin': '*'}
+        return TODOS, 200
 
     def post(self):
         now = str(datetime.datetime.now())
         args = parser.parse_args()
-        todo_id = len(TODOS)
+        todo_id = TODOS[-1]['id'] + 1
         todo = {
             'id': todo_id,
             'title': args['title'],
@@ -98,7 +104,7 @@ class TodoList(Resource):
             'updated_at': now
         }
         TODOS.append(todo)
-        return TODOS[todo_id], 201
+        return todo, 201
 
 api.add_resource(TodoList, '/todos', '/todos/')
 api.add_resource(Todo, '/todos/<int:todo_id>')
