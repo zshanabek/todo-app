@@ -83,7 +83,8 @@ class Todo(Resource):
                 'created_at': prev['created_at'] if args['created_at'] == None else args['created_at'],
                 'updated_at': prev['updated_at'] if args['updated_at'] == None else args['updated_at']
                 }
-        prev = task
+        TODOS.remove(prev)
+        TODOS.append(task)
         return task, 201
 
 class TodoList(Resource):
