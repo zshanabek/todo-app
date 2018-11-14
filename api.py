@@ -2,9 +2,12 @@ from flask import Flask
 from flask_restful import reqparse, abort, Api, Resource, inputs
 import datetime
 import pdb
+from flask_cors import CORS
 
 app = Flask(__name__)
 api = Api(app)
+
+CORS(app)
 
 now = str(datetime.datetime.now())
 ok = datetime.datetime.now().strftime('%d.%m.%Y')
@@ -32,7 +35,7 @@ TODOS = [
         'title': 'profit!',
         'description': 'this is desc1',
         'due_date': ok,
-        'completed': True,
+        'completed': False,
         'created_at': now,
         'updated_at': now
     }
