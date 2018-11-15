@@ -7,7 +7,7 @@
         <alert :message="message" v-if="showMessage"></alert>
         <button type="button" class="btn btn-success btn-sm" v-b-modal.todo-modal>Add Todo</button>
         <br><br>
-        <table class="table table-hover">
+        <table v-if="todos.length" class="table table-hover">
           <thead>
             <tr>
               <th scope="col">Title</th>
@@ -44,6 +44,7 @@
             </tr>
           </tbody>
         </table>
+        <p class="text-center" v-else>No todos left!</p>
       </b-col>
     </b-row>
     <b-modal ref="addTodoModal"
@@ -76,7 +77,8 @@
           <datepicker id="form-due_date-input"
                       type="text"
                       v-model="addTodoForm.due_date"
-                      placeholder="Select date">
+                      placeholder="Select date"
+                      format="yyyy-MM-dd">
           </datepicker>
         </b-form-group>
         <b-button type="submit" variant="primary">Submit</b-button>
@@ -114,7 +116,8 @@
           <datepicker id="form-due_date-input"
                       type="text"
                       v-model="editForm.due_date"
-                      placeholder="Enter date">
+                      placeholder="Enter date"
+                      format="yyyy-MM-dd">
           </datepicker>
         </b-form-group>
         <b-form-group id="form-completed-edit-group">
@@ -198,7 +201,7 @@ export default {
       const payload = {
         title: this.addTodoForm.title,
         description: this.addTodoForm.description,
-        due_date: this.addTodoForm.due_date, // property shorthand
+        due_date: this.addTodoForm.due_date,
       };
       this.addTodo(payload);
       this.initForm();
