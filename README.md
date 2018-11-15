@@ -59,3 +59,5 @@ $ npm install
 $ npm run dev
 ```
 4. Your application is running here: http://localhost:8080
+
+![Screenshot](screenshot.png)
