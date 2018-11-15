@@ -1,56 +1,61 @@
 # Introduction
-This api provides data about tweets. Get tweets searching by user or hashtag.  
-You can read documentation [here...](https://documenter.getpostman.com/view/1700393/RWgjZ2DU)  
-The project is deployed on Heroku and can be accessed through this link: https://twittermicro.herokuapp.com/users/twitter
+The Todolist app which was built with Python Flask and VueJS  
+Demo: https://twittermicro.herokuapp.com/users/twitter
 
-# Installation
+Only Python 3.5+ is supported
+# Backend installation
 
 1. Clone repository
 ```bash
-$ git clone https://github.com/zshanabek/zhunisali-project
-$ cd zhunisali-project
+$ git clone https://github.com/zshanabek/todo-app
+$ cd todo-app
 ```
-2. Install dependencies
+2. Install Python dependencies
 ```bash
+$ cd server
 $ pip install -r requirements.txt
 ```
 3. Run server
 ```bash
-$ python start.py
+$ python3 api.py
 ```
-4. Get tweets
+4. Get todos
 ```bash
-$ curl localhost:5000/users/zshanabek
+$ curl localhost:5000/todos
 ```
 Expect json response:
 ```json
-{
-  "tweets": [
+[
     {
-      "account": {
-        "fullname": "Zhunisali Shanabek", 
-        "href": "/zshanabek", 
-        "id": "760766794940416000"
-      }, 
-      "date": "Fri, 28 Sep 2018 15:26:04 GMT", 
-      "hashtags": [
-        "#postmanclient"
-      ], 
-      "likes": 213, 
-      "replies": 54, 
-      "retweets": 42, 
-      "text": "If you need to document your API, use @postmanclient. Excellent software.\n#postmanclient"
+        "id": 1,
+        "title": "build an API",
+        "description": "this is desc1",
+        "due_date": "2018-11-16",
+        "completed": true,
+        "created_at": "2018-11-15 15:10:29.706557",
+        "updated_at": "2018-11-15 15:10:29.706557"
+    },
+    {
+        "id": 2,
+        "title": "write article",
+        "description": "this is desc1",
+        "due_date": "2018-11-17",
+        "completed": true,
+        "created_at": "2018-11-15 15:10:29.706557",
+        "updated_at": "2018-11-15 15:10:29.706557"
     }
-  ]
-}
-```
-# Unit tests
-```bash
-$ python3 unit_tests.py 
-```
-# Overview
-You can set the limit of tweets in response by typing argument: `limit`.  
-For example. `localhost:5000/users/zshanabek?limit=10`.  
-Default is 30.
+]
 
-Only Python 3.6+ is supported
+```
+# Frontend installation
+
+2. Install Javascript dependencies
+```bash
+$ cd client
+$ npm install
+```
+3. Run server
+```bash
+$ npm run dev
+```
+4. Your application is running here: http://localhost:8080
