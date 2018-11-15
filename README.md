@@ -1,7 +1,5 @@
 # Introduction
 The Todolist app which was built with Python Flask and VueJS  
-Demo: https://twittermicro.herokuapp.com/users/twitter
-
 Only Python 3.5+ is supported
 # Backend installation
 
@@ -13,7 +11,7 @@ $ cd todo-app
 2. Install Python dependencies
 ```bash
 $ cd server
-$ pip install -r requirements.txt
+$ pip3 install -r requirements.txt
 ```
 3. Run server
 ```bash
