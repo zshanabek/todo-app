@@ -1,6 +1,6 @@
 # Introduction
 The Todolist app which was built with Python Flask and VueJS  
-Only Python 3.5+ is supported
+Only Python 3.6+ is supported
 # Backend installation
 
 1. Clone repository
