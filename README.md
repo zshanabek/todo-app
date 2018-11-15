@@ -11,7 +11,7 @@ $ cd todo-app
 2. Install Python dependencies
 ```bash
 $ cd server
-$ pip install -r requirements.txt
+$ pip3 install -r requirements.txt
 ```
 3. Run server
 ```bash
