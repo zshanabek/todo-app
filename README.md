@@ -1,68 +1,61 @@
-# Lem-in
+# Introduction
+The Todolist app which was built with Python Flask and VueJS  
+Only Python 3.6+ is supported
+# Backend installation
 
-This program finds the shortest path from `start` vertice to `end` vertice in a graph.
-
-## Getting Started
-
-### Compiling
-
-Clone the repository
-
+1. Clone repository
 ```bash
-git clone --recurse-submodules -j8 https://github.com/zshanabek/lem-in.git
+$ git clone https://github.com/zshanabek/todo-app
+$ cd todo-app
 ```
-
-Enter project
-
+2. Install Python dependencies
 ```bash
-cd lem-in
+$ cd server
+$ pip3 install -r requirements.txt
 ```
-
-Compile using Makefile
-
+3. Run server
 ```bash
-make
+$ python3 api.py
 ```
-
-### Usage
-
-Lem-in reads on STDIN so you can just launch it and write your map:
-
+4. Get todos
 ```bash
-./lem-in
+$ curl localhost:5000/todos
 ```
+Expect json response:
+```json
+[
+    {
+        "id": 1,
+        "title": "build an API",
+        "description": "this is desc1",
+        "due_date": "2018-11-16",
+        "completed": true,
+        "created_at": "2018-11-15 15:10:29.706557",
+        "updated_at": "2018-11-15 15:10:29.706557"
+    },
+    {
+        "id": 2,
+        "title": "write article",
+        "description": "this is desc1",
+        "due_date": "2018-11-17",
+        "completed": true,
+        "created_at": "2018-11-15 15:10:29.706557",
+        "updated_at": "2018-11-15 15:10:29.706557"
+    }
+]
 
-or you can redirect an existing map:
+```
+# Frontend installation
 
+2. Install Javascript dependencies
 ```bash
-./lem-in < maps/simple
+$ cd client
+$ npm install
 ```
-
-## Example
-
-A map looks like this:
-
+3. Run server
 ```bash
-3
-##start
-a 0 0
-b 1 1
-c 2 0
-##end
-d 3 1
-a-b
-b-c
-d-e
+$ npm run dev
 ```
+4. Your application is running here: http://localhost:8080
 
-It is composed of three parts:
-
-* **Number of ants**. In this case 3 is number of ants
-* **Rooms**. `a` and `b` are rooms
-* **Links**. `a-b` is the edge between rooms `a` and `b`
-
-`##start` The beginning of path. In this case `a` is a start room
-
-`##end` The exit from path. In this case `d` is a start room
-
-Comments can be anywhere but you have to specify the start and end rooms by putting the commands `##start` and `##end` before declaring the room.
+![Screenshot](screenshot.png)
